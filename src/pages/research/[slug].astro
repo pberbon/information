@@ -12,7 +12,8 @@ const { paper, allPapers } = Astro.props;
 const { title, description, author, pubDate, category, keywords, pdfFile, citation } = paper.data;
 const { Content } = await paper.render();
 
-const pdfUrl = `/papers/${pdfFile}`;
+const base = import.meta.env.BASE_URL;
+const pdfUrl = `${base}papers/${pdfFile}`;
 
 // Related papers: shared keywords, most overlap first.
 const related = allPapers
@@ -27,13 +28,13 @@ const defaultCitation = citation || `${author}. (${pubDate.getFullYear()}). ${ti
 ---
 <BaseLayout title={title} description={description} article={true}>
   <div class="prose" style="padding-top:2.5rem;max-width:900px;">
-    <nav class="breadcrumbs"><a href="/">Home</a> / <a href="/research/">Research</a> / <span>{title}</span></nav>
+    <nav class="breadcrumbs"><a href={base}>Home</a> / <a href={`${base}research/`}>Research</a> / <span>{title}</span></nav>
     <h1>{title}</h1>
     <p style="color:var(--text-muted)">
       {author} · {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} · {category}
     </p>
     <div class="tag-list">
-      {keywords.map((k: string) => <a class="tag" href={`/tags/${k.toLowerCase()}/`}>{k}</a>)}
+      {keywords.map((k: string) => <a class="tag" href={`${base}tags/${k.toLowerCase()}/`}>{k}</a>)}
     </div>
 
     <div class="tag-list" style="margin: 1.25rem 0;">
@@ -56,7 +57,7 @@ const defaultCitation = citation || `${author}. (${pubDate.getFullYear()}). ${ti
         <h2>Related Papers</h2>
         <div class="card-grid">
           {related.map((r) => (
-            <Card href={`/research/${r.slug}/`} title={r.data.title} description={r.data.description} tags={r.data.keywords} />
+            <Card href={`${base}research/${r.slug}/`} title={r.data.title} description={r.data.description} tags={r.data.keywords} />
           ))}
         </div>
       </>

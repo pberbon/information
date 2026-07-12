@@ -11,15 +11,16 @@ const papers = (await getCollection('research'))
 const projects = (await getCollection('projects'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
+const base = import.meta.env.BASE_URL;
 const featuredPosts = blogPosts.slice(0, 3);
 const featuredPapers = papers.slice(0, 3);
 const featuredProjects = projects.slice(0, 3);
 
 // "Recent additions" merges all content types by date for a unified feed.
 const recent = [
-  ...blogPosts.map((p) => ({ type: 'Blog', date: p.data.pubDate, title: p.data.title, href: `/blog/${p.slug}/` })),
-  ...papers.map((p) => ({ type: 'Research', date: p.data.pubDate, title: p.data.title, href: `/research/${p.slug}/` })),
-  ...projects.map((p) => ({ type: 'Project', date: p.data.date, title: p.data.title, href: `/projects/${p.slug}/` })),
+  ...blogPosts.map((p) => ({ type: 'Blog', date: p.data.pubDate, title: p.data.title, href: `${base}blog/${p.slug}/` })),
+  ...papers.map((p) => ({ type: 'Research', date: p.data.pubDate, title: p.data.title, href: `${base}research/${p.slug}/` })),
+  ...projects.map((p) => ({ type: 'Project', date: p.data.date, title: p.data.title, href: `${base}projects/${p.slug}/` })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 5);
 ---
 <BaseLayout title="Home">
@@ -28,9 +29,9 @@ const recent = [
       <h1>Hi, I'm {SITE.name}.</h1>
       <p class="lead">{SITE.tagline}</p>
       <div class="tag-list" style="margin-top:1.5rem;">
-        <a class="button" href="/blog/">Read the Blog</a>
-        <a class="button secondary" href="/research/">Browse Research</a>
-        <a class="button secondary" href="/projects/">See Projects</a>
+        <a class="button" href={`${base}blog/`}>Read the Blog</a>
+        <a class="button secondary" href={`${base}research/`}>Browse Research</a>
+        <a class="button secondary" href={`${base}projects/`}>See Projects</a>
       </div>
     </section>
 
@@ -45,10 +46,10 @@ const recent = [
 
     {featuredPosts.length > 0 && (
       <section>
-        <div class="section-heading"><h2>Featured Blog Posts</h2><a href="/blog/">View all &rarr;</a></div>
+        <div class="section-heading"><h2>Featured Blog Posts</h2><a href={`${base}blog/`}>View all &rarr;</a></div>
         <div class="card-grid">
           {featuredPosts.map((post) => (
-            <Card href={`/blog/${post.slug}/`} title={post.data.title} description={post.data.description}
+            <Card href={`${base}blog/${post.slug}/`} title={post.data.title} description={post.data.description}
               meta={post.data.pubDate.toLocaleDateString()} tags={post.data.tags} />
           ))}
         </div>
@@ -57,10 +58,10 @@ const recent = [
 
     {featuredPapers.length > 0 && (
       <section>
-        <div class="section-heading"><h2>Featured Research</h2><a href="/research/">View all &rarr;</a></div>
+        <div class="section-heading"><h2>Featured Research</h2><a href={`${base}research/`}>View all &rarr;</a></div>
         <div class="card-grid">
           {featuredPapers.map((paper) => (
-            <Card href={`/research/${paper.slug}/`} title={paper.data.title} description={paper.data.description}
+            <Card href={`${base}research/${paper.slug}/`} title={paper.data.title} description={paper.data.description}
               meta={paper.data.category} tags={paper.data.keywords} />
           ))}
         </div>
@@ -69,10 +70,10 @@ const recent = [
 
     {featuredProjects.length > 0 && (
       <section>
-        <div class="section-heading"><h2>Featured Projects</h2><a href="/projects/">View all &rarr;</a></div>
+        <div class="section-heading"><h2>Featured Projects</h2><a href={`${base}projects/`}>View all &rarr;</a></div>
         <div class="card-grid">
           {featuredProjects.map((project) => (
-            <Card href={`/projects/${project.slug}/`} title={project.data.title} description={project.data.description}
+            <Card href={`${base}projects/${project.slug}/`} title={project.data.title} description={project.data.description}
               meta={project.data.status} tags={project.data.tags} />
           ))}
         </div>

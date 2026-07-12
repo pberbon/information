@@ -8,7 +8,7 @@ import { SITE } from '../site.config';
       <a href={`mailto:${SITE.email}`}>Email</a>
       <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="/rss.xml">RSS</a>
+      <a href={`${import.meta.env.BASE_URL}rss.xml`}>RSS</a>
     </div>
   </div>
 </footer>

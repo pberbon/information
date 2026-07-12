@@ -14,14 +14,15 @@ export async function getStaticPaths() {
 
 const { category, posts } = Astro.props;
 const sorted = posts.sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout title={`Category: ${category}`}>
   <div class="container">
-    <nav class="breadcrumbs"><a href="/">Home</a> / <a href="/blog/">Blog</a> / <span>{category}</span></nav>
+    <nav class="breadcrumbs"><a href={base}>Home</a> / <a href={`${base}blog/`}>Blog</a> / <span>{category}</span></nav>
     <h1>Category: {category}</h1>
     <div class="card-grid">
       {sorted.map((post: any) => (
-        <Card href={`/blog/${post.slug}/`} title={post.data.title} description={post.data.description}
+        <Card href={`${base}blog/${post.slug}/`} title={post.data.title} description={post.data.description}
           meta={post.data.pubDate.toLocaleDateString()} tags={post.data.tags} />
       ))}
     </div>

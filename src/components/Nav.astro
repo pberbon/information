@@ -1,19 +1,23 @@
 ---
 import { SITE, NAV_LINKS } from '../site.config';
 const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
 ---
 <header class="site-nav">
   <div class="nav-inner">
-    <a href="/" class="brand">{SITE.name}</a>
+    <a href={base} class="brand">{SITE.name}</a>
     <nav aria-label="Primary">
       <ul class="nav-links">
-        {NAV_LINKS.map((link) => (
-          <li>
-            <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
-              {link.label}
-            </a>
-          </li>
-        ))}
+        {NAV_LINKS.map((link) => {
+          const href = base + link.href.replace(/^\//, '');
+          return (
+            <li>
+              <a href={href} aria-current={currentPath === href ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </nav>
     <div class="nav-right">
@@ -37,18 +41,15 @@ const currentPath = Astro.url.pathname;
 
 <style>
   .search-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 100;
-  display: none;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 10vh;
-}
-.search-overlay:not([hidden]) {
-  display: flex;
-}
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10vh;
+  }
   .search-panel {
     background: var(--bg);
     border: 1px solid var(--border);

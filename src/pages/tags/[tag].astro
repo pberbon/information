@@ -27,6 +27,7 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts, papers, projects } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout title={`Tag: ${tag}`}>
   <div class="container">
@@ -36,7 +37,7 @@ const { tag, posts, papers, projects } = Astro.props;
       <>
         <h2>Blog Posts</h2>
         <div class="card-grid">
-          {posts.map((p: any) => <Card href={`/blog/${p.slug}/`} title={p.data.title} description={p.data.description} tags={p.data.tags} />)}
+          {posts.map((p: any) => <Card href={`${base}blog/${p.slug}/`} title={p.data.title} description={p.data.description} tags={p.data.tags} />)}
         </div>
       </>
     )}
@@ -45,7 +46,7 @@ const { tag, posts, papers, projects } = Astro.props;
       <>
         <h2>Research Papers</h2>
         <div class="card-grid">
-          {papers.map((p: any) => <Card href={`/research/${p.slug}/`} title={p.data.title} description={p.data.description} tags={p.data.keywords} />)}
+          {papers.map((p: any) => <Card href={`${base}research/${p.slug}/`} title={p.data.title} description={p.data.description} tags={p.data.keywords} />)}
         </div>
       </>
     )}
@@ -54,7 +55,7 @@ const { tag, posts, papers, projects } = Astro.props;
       <>
         <h2>Projects</h2>
         <div class="card-grid">
-          {projects.map((p: any) => <Card href={`/projects/${p.slug}/`} title={p.data.title} description={p.data.description} tags={p.data.tags} />)}
+          {projects.map((p: any) => <Card href={`${base}projects/${p.slug}/`} title={p.data.title} description={p.data.description} tags={p.data.tags} />)}
         </div>
       </>
     )}

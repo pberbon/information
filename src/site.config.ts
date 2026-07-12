@@ -2,10 +2,12 @@
 // Update this once and it propagates across the whole site.
 export const SITE = {
   name: 'Patrick Berbon',
-  title: 'Your Name — Researcher & Engineer',
+  title: 'Patrick Berbon — Researcher & Engineer',
   tagline: 'Notes on research, engineering, and the occasional side project.',
-  email: 'patrick.z.berbon@gmail.com',
-  github: 'https://github.com/pberbon',
+  email: 'you@example.com',
+  github: 'https://github.com/your-username',
+  linkedin: 'https://linkedin.com/in/your-username',
+  twitter: '',
 };
 
 export const NAV_LINKS = [

@@ -13,22 +13,23 @@ const { entry, headings, readingMinutes, prev, next } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, category, heroImage } = entry.data;
 const tocHeadings = headings.filter((h) => h.depth <= 3);
 const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout title={title} description={description} image={heroImage} article={true}>
   <article class="prose" style="padding-top:2.5rem;">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a> / <a href="/blog/">Blog</a> / <span>{title}</span>
+      <a href={base}>Home</a> / <a href={`${base}blog/`}>Blog</a> / <span>{title}</span>
     </nav>
 
     <h1>{title}</h1>
     <p style="color:var(--text-muted);font-size:0.9rem;">
       {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
       {updatedDate && ` · Updated ${updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}
-      · {readingMinutes} min read · <a href={`/blog/category/${category.toLowerCase()}/`}>{category}</a>
+      · {readingMinutes} min read · <a href={`${base}blog/category/${category.toLowerCase()}/`}>{category}</a>
     </p>
 
     <div class="tag-list">
-      {tags.map((t: string) => <a class="tag" href={`/tags/${t.toLowerCase()}/`}>{t}</a>)}
+      {tags.map((t: string) => <a class="tag" href={`${base}tags/${t.toLowerCase()}/`}>{t}</a>)}
     </div>
 
     {heroImage && <img src={heroImage} alt={title} style="margin: 1.5rem 0; width:100%; border-radius: var(--radius);" />}
@@ -55,8 +56,8 @@ const shareUrl = new URL(Astro.url.pathname, Astro.site).toString();
     </div>
 
     <nav class="section-heading no-print" style="margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-      <div>{prev && <a href={`/blog/${prev.slug}/`}>&larr; {prev.title}</a>}</div>
-      <div>{next && <a href={`/blog/${next.slug}/`}>{next.title} &rarr;</a>}</div>
+      <div>{prev && <a href={`${base}blog/${prev.slug}/`}>&larr; {prev.title}</a>}</div>
+      <div>{next && <a href={`${base}blog/${next.slug}/`}>{next.title} &rarr;</a>}</div>
     </nav>
   </article>
 </BaseLayout>

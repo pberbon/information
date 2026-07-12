@@ -6,6 +6,7 @@ import { getCollection } from 'astro:content';
 const papers = (await getCollection('research'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const categories = [...new Set(papers.map((p) => p.data.category))];
+const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout title="Research" description="A library of research papers, notes, and writeups.">
   <div class="container">
@@ -23,7 +24,7 @@ const categories = [...new Set(papers.map((p) => p.data.category))];
     <div class="card-grid">
       {papers.map((paper) => (
         <Card
-          href={`/research/${paper.slug}/`}
+          href={`${base}research/${paper.slug}/`}
           title={paper.data.title}
           description={paper.data.description}
           meta={`${paper.data.pubDate.toLocaleDateString()} · ${paper.data.category}`}
