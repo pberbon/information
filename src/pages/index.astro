@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Card from '../components/Card.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../site.config';
+
+const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const papers = (await getCollection('research'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const projects = (await getCollection('projects'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const featuredPosts = blogPosts.slice(0, 3);
+const featuredPapers = papers.slice(0, 3);
+const featuredProjects = projects.slice(0, 3);
+
+// "Recent additions" merges all content types by date for a unified feed.
+const recent = [
+  ...blogPosts.map((p) => ({ type: 'Blog', date: p.data.pubDate, title: p.data.title, href: `/blog/${p.slug}/` })),
+  ...papers.map((p) => ({ type: 'Research', date: p.data.pubDate, title: p.data.title, href: `/research/${p.slug}/` })),
+  ...projects.map((p) => ({ type: 'Project', date: p.data.date, title: p.data.title, href: `/projects/${p.slug}/` })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 5);
+---
+<BaseLayout title="Home">
+  <div class="container">
+    <section class="hero">
+      <h1>Hi, I'm {SITE.name}.</h1>
+      <p class="lead">{SITE.tagline}</p>
+      <div class="tag-list" style="margin-top:1.5rem;">
+        <a class="button" href="/blog/">Read the Blog</a>
+        <a class="button secondary" href="/research/">Browse Research</a>
+        <a class="button secondary" href="/projects/">See Projects</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Short Bio</h2>
+      <p style="max-width:680px;color:var(--text-muted)">
+        A brief biography goes here — background, current focus, and what you're working on.
+        Edit this paragraph in <code>src/pages/index.astro</code>, or move it into
+        <code>src/content/about.md</code> if you'd like it managed as content.
+      </p>
+    </section>
+
+    {featuredPosts.length > 0 && (
+      <section>
+        <div class="section-heading"><h2>Featured Blog Posts</h2><a href="/blog/">View all &rarr;</a></div>
+        <div class="card-grid">
+          {featuredPosts.map((post) => (
+            <Card href={`/blog/${post.slug}/`} title={post.data.title} description={post.data.description}
+              meta={post.data.pubDate.toLocaleDateString()} tags={post.data.tags} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {featuredPapers.length > 0 && (
+      <section>
+        <div class="section-heading"><h2>Featured Research</h2><a href="/research/">View all &rarr;</a></div>
+        <div class="card-grid">
+          {featuredPapers.map((paper) => (
+            <Card href={`/research/${paper.slug}/`} title={paper.data.title} description={paper.data.description}
+              meta={paper.data.category} tags={paper.data.keywords} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {featuredProjects.length > 0 && (
+      <section>
+        <div class="section-heading"><h2>Featured Projects</h2><a href="/projects/">View all &rarr;</a></div>
+        <div class="card-grid">
+          {featuredProjects.map((project) => (
+            <Card href={`/projects/${project.slug}/`} title={project.data.title} description={project.data.description}
+              meta={project.data.status} tags={project.data.tags} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {recent.length > 0 && (
+      <section>
+        <h2>Recent Additions</h2>
+        <ul style="padding-left:0;list-style:none;">
+          {recent.map((item) => (
+            <li style="padding:0.5rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+              <a href={item.href}>{item.title}</a>
+              <span class="card-meta">{item.type} · {item.date.toLocaleDateString()}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</BaseLayout>

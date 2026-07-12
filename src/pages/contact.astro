@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+---
+<BaseLayout title="Contact" description="Get in touch.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>Contact</h1>
+    <p>The quickest way to reach me is email.</p>
+
+    <div class="tag-list" style="margin:1rem 0 2rem;">
+      <a class="button" href={`mailto:${SITE.email}`}>Email Me</a>
+      <a class="button secondary" href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="button secondary" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+
+    <h2>Or send a message</h2>
+    <p style="color:var(--text-muted);font-size:0.9rem;">
+      This form has no backend (this is a static site), so it opens your email client
+      with the message pre-filled. If you'd like a working submit-without-leaving-the-page
+      form later, services like Formspree or Netlify Forms plug in without needing a
+      custom server.
+    </p>
+    <form id="contact-form" style="display:flex;flex-direction:column;gap:0.75rem;max-width:480px;">
+      <input type="text" name="name" placeholder="Your name" required
+        style="padding:0.6rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text);" />
+      <input type="email" name="email" placeholder="Your email" required
+        style="padding:0.6rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text);" />
+      <textarea name="message" placeholder="Message" rows="5" required
+        style="padding:0.6rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text);"></textarea>
+      <button type="submit" class="button" style="align-self:flex-start;">Send</button>
+    </form>
+  </div>
+
+  <script define:vars={{ email: SITE.email }}>
+    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value;
+      const from = form.email.value;
+      const message = form.message.value;
+      const subject = encodeURIComponent(`Message from ${name}`);
+      const body = encodeURIComponent(`${message}\n\n— ${name} (${from})`);
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    });
+  </script>
+</BaseLayout>

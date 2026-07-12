@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+---
+<BaseLayout title="About" description="More about me.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>About</h1>
+
+    <img src="/images/profile.jpg" alt={SITE.name} style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:1.5rem;" />
+
+    <h2>Biography</h2>
+    <p>Write a few paragraphs about yourself here — background, current focus, and what drives your work.</p>
+
+    <h2>Education</h2>
+    <ul>
+      <li><strong>Degree, Institution</strong> — Year</li>
+    </ul>
+
+    <h2>Skills</h2>
+    <div class="tag-list">
+      <span class="tag">Skill One</span>
+      <span class="tag">Skill Two</span>
+      <span class="tag">Skill Three</span>
+    </div>
+
+    <h2>Interests</h2>
+    <p>List a few personal or intellectual interests.</p>
+
+    <h2>Timeline</h2>
+    <ul>
+      <li><strong>2026</strong> — Milestone or role.</li>
+      <li><strong>2024</strong> — Milestone or role.</li>
+    </ul>
+
+    <h2>Elsewhere</h2>
+    <div class="tag-list">
+      <a class="tag" href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="tag" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="tag" href={`mailto:${SITE.email}`}>Email</a>
+    </div>
+  </div>
+</BaseLayout>

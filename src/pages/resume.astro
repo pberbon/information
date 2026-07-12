@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Resume" description="My resume, viewable and downloadable.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>Resume</h1>
+    <p style="color:var(--text-muted)">
+      To update: replace <code>public/resume/resume.pdf</code> with your latest file. No other changes needed.
+    </p>
+    <a class="button" href="/resume/resume.pdf" download style="margin-bottom:1.25rem;display:inline-block;">Download PDF</a>
+    <object data="/resume/resume.pdf" type="application/pdf" class="pdf-embed">
+      <p>Your browser can't preview PDFs inline. <a href="/resume/resume.pdf">Download the resume</a> instead.</p>
+    </object>
+  </div>
+</BaseLayout>

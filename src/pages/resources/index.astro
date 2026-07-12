@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const resources = await getCollection('resources');
+const types = [...new Set(resources.map((r) => r.data.type))];
+---
+<BaseLayout title="Resources" description="Useful papers, tools, courses, and sites.">
+  <div class="container">
+    <h1>Resources</h1>
+
+    <div class="tag-list" style="margin-bottom:1.5rem;">
+      <button class="tag filter-btn" data-type="all" style="border:none;cursor:pointer;">All</button>
+      {types.map((t) => <button class="tag filter-btn" data-type={t} style="border:none;cursor:pointer;">{t}</button>)}
+    </div>
+
+    <div class="card-grid" id="resource-grid">
+      {resources.map((r) => (
+        <a href={r.data.url} target="_blank" rel="noopener noreferrer" class="card resource-card" data-type={r.data.type} style="text-decoration:none;">
+          <h3>{r.data.title}</h3>
+          <p>{r.data.description}</p>
+          <div class="card-meta">{r.data.type} · {r.data.category}</div>
+          <div class="tag-list">{r.data.tags.map((t: string) => <span class="tag">{t}</span>)}</div>
+        </a>
+      ))}
+    </div>
+    {resources.length === 0 && <p>No resources yet — add a Markdown file to <code>src/content/resources/</code>.</p>}
+  </div>
+
+  <script>
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const type = (btn as HTMLElement).dataset.type;
+        document.querySelectorAll('.resource-card').forEach((card) => {
+          const cardType = (card as HTMLElement).dataset.type;
+          (card as HTMLElement).style.display = type === 'all' || cardType === type ? 'flex' : 'none';
+        });
+      });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/Card.astro';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('research');
+  return papers.map((paper) => ({ params: { slug: paper.slug }, props: { paper, allPapers: papers } }));
+}
+
+const { paper, allPapers } = Astro.props;
+const { title, description, author, pubDate, category, keywords, pdfFile, citation } = paper.data;
+const { Content } = await paper.render();
+
+const pdfUrl = `/papers/${pdfFile}`;
+
+// Related papers: shared keywords, most overlap first.
+const related = allPapers
+  .filter((p) => p.slug !== paper.slug)
+  .map((p) => ({ p, overlap: p.data.keywords.filter((k) => keywords.includes(k)).length }))
+  .filter((x) => x.overlap > 0)
+  .sort((a, b) => b.overlap - a.overlap)
+  .slice(0, 3)
+  .map((x) => x.p);
+
+const defaultCitation = citation || `${author}. (${pubDate.getFullYear()}). ${title}.`;
+---
+<BaseLayout title={title} description={description} article={true}>
+  <div class="prose" style="padding-top:2.5rem;max-width:900px;">
+    <nav class="breadcrumbs"><a href="/">Home</a> / <a href="/research/">Research</a> / <span>{title}</span></nav>
+    <h1>{title}</h1>
+    <p style="color:var(--text-muted)">
+      {author} · {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} · {category}
+    </p>
+    <div class="tag-list">
+      {keywords.map((k: string) => <a class="tag" href={`/tags/${k.toLowerCase()}/`}>{k}</a>)}
+    </div>
+
+    <div class="tag-list" style="margin: 1.25rem 0;">
+      <a class="button" href={pdfUrl} download>Download PDF</a>
+      <a class="button secondary" href={pdfUrl} target="_blank" rel="noopener noreferrer">View in New Tab</a>
+    </div>
+
+    <object data={pdfUrl} type="application/pdf" class="pdf-embed">
+      <p>Your browser can't preview PDFs inline. <a href={pdfUrl}>Download the PDF</a> instead.</p>
+    </object>
+
+    <h2>Abstract / Notes</h2>
+    <Content />
+
+    <h2>Citation</h2>
+    <pre><code>{defaultCitation}</code></pre>
+
+    {related.length > 0 && (
+      <>
+        <h2>Related Papers</h2>
+        <div class="card-grid">
+          {related.map((r) => (
+            <Card href={`/research/${r.slug}/`} title={r.data.title} description={r.data.description} tags={r.data.keywords} />
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</BaseLayout>
