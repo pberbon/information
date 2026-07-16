@@ -5,8 +5,8 @@
 :root {
   --bg: #ece2c9;
   --bg-elevated: #e2d5b4;
-  --text: #f5efdd;
-  --text-muted: #b3a686;
+  --text: #2a2118;        /* ← this should be the dark brownish-black one */
+  --text-muted: #6b5d47;  /* ← this should be the muted brown one */
   --accent: #6e2a2a;
   --accent-contrast: #f3e9d2;
   --accent-soft: #ded0aa;
@@ -27,8 +27,8 @@
 html[data-theme='dark'] {
   --bg: #14110d;
   --bg-elevated: #201b14;
-  --text: #e7dcc0;
-  --text-muted: #9c8f70;
+  --text: #f5efdd;        /* ← this is the near-white one, belongs HERE */
+  --text-muted: #b3a686;  /* ← this belongs HERE */
   --accent: #b0574f;
   --accent-contrast: #14110d;
   --accent-soft: #2c1e1a;
