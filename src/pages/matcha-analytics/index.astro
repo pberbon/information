@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FeedList from '../../components/FeedList.astro';
+import { getCollection } from 'astro:content';
+
+const raw = (await getCollection('matchaAnalytics')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const entries = await Promise.all(
+  raw.map(async (e) => ({ slug: e.slug, data: e.data, Content: (await e.render()).Content }))
+);
+---
+<BaseLayout title="Matcha Analytics" description="Tracking matcha consumption and how my views shift across variants.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>Matcha Analytics</h1>
+    <p style="color:var(--text-muted)">
+      A running log of matcha variants and tasting notes, newest first, each with a star rating.
+      To add one, create a new Markdown file in <code>src/content/matchaAnalytics/</code> — use
+      <code>title</code> for the variant name and <code>rating</code> (0–5) for your current view of it.
+    </p>
+    <FeedList entries={entries} pdfDir="matcha-files" emptyMessage="Nothing here yet — add a Markdown file to src/content/matchaAnalytics/ to get started." />
+  </div>
+</BaseLayout>

@@ -2,8 +2,8 @@
 // Update this once and it propagates across the whole site.
 export const SITE = {
   name: 'Patrick Berbon',
-  title: 'Patrick Berbon — Researcher & Engineer',
-  tagline: 'Notes on research, engineering, and the occasional side project.',
+  title: 'Patrick Berbon',
+  tagline: "Weekly notes, matcha tasting logs, a running song ranking, and whatever else I'm into.",
   email: 'you@example.com',
   github: 'https://github.com/your-username',
   linkedin: 'https://linkedin.com/in/your-username',
@@ -11,13 +11,9 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/blog/', label: 'Blog' },
-  { href: '/research/', label: 'Research' },
-  { href: '/projects/', label: 'Projects' },
-  { href: '/reading-list/', label: 'Reading List' },
-  { href: '/resources/', label: 'Resources' },
+  { href: '/weekly-summary-notes/', label: 'Weekly Summary Notes' },
+  { href: '/matcha-analytics/', label: 'Matcha Analytics' },
+  { href: '/top-300-songs/', label: 'Top 300 Songs' },
   { href: '/insights/', label: 'Insight of the Week' },
-  { href: '/about/', label: 'About' },
-  { href: '/contact/', label: 'Contact' },
+  { href: '/recent-books/', label: 'Recent Books' },
 ];

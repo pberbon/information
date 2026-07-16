@@ -1,11 +1,11 @@
 ---
-// Shared by every tab's index page. Each entry is a dated chunk of text
-// with an optional title and an optional attached PDF — no separate page
-// per entry. `slug` is used as an anchor id so entries stay linkable
-// (e.g. from the homepage) even without their own route.
+// Shared by every "feed" tab. Each entry is a dated chunk of text with an
+// optional title, an optional star rating, and an optional attached PDF —
+// no separate page per entry. `slug` is used as an anchor id so entries
+// stay linkable (e.g. from the homepage) even without their own route.
 interface Entry {
   slug: string;
-  data: { date: Date; title?: string; pdfFile?: string };
+  data: { date: Date; title?: string; rating?: number; pdfFile?: string };
   Content: any;
 }
 interface Props {
@@ -21,7 +21,12 @@ const base = import.meta.env.BASE_URL;
     <p style="color:var(--text-muted); font-style: italic; margin-bottom: 0.5rem;">
       {data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
     </p>
-    {data.title && <h2 style="margin-top:0;">{data.title}</h2>}
+    {data.title && <h2 style="margin-top:0; margin-bottom: 0.25rem;">{data.title}</h2>}
+    {typeof data.rating === 'number' && (
+      <p style="color: var(--brass); margin: 0 0 0.75rem; font-size: 1.1rem;" aria-label={`Rated ${data.rating} out of 5`}>
+        {'★'.repeat(Math.round(data.rating))}{'☆'.repeat(5 - Math.round(data.rating))}
+      </p>
+    )}
     <div class="post-body">
       <Content />
     </div>

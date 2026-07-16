@@ -1,0 +1,12 @@
+[
+  { "rank": 1, "song": "Example Song One", "artist": "Artist A", "genre": "Indie Rock", "releaseDate": "2019-06-14" },
+  { "rank": 2, "song": "Example Song Two", "artist": "Artist B", "genre": "Pop", "releaseDate": "2021-03-02" },
+  { "rank": 3, "song": "Example Song Three", "artist": "Artist A", "genre": "Indie Rock", "releaseDate": "2016-11-20" },
+  { "rank": 4, "song": "Example Song Four", "artist": "Artist C", "genre": "R&B", "releaseDate": "2020-09-10" },
+  { "rank": 5, "song": "Example Song Five", "artist": "Artist D", "genre": "Hip-Hop", "releaseDate": "2022-01-28" },
+  { "rank": 6, "song": "Example Song Six", "artist": "Artist B", "genre": "Pop", "releaseDate": "2018-07-04" },
+  { "rank": 7, "song": "Example Song Seven", "artist": "Artist E", "genre": "Folk", "releaseDate": "2015-05-19" },
+  { "rank": 8, "song": "Example Song Eight", "artist": "Artist C", "genre": "R&B", "releaseDate": "2023-02-14" },
+  { "rank": 9, "song": "Example Song Nine", "artist": "Artist A", "genre": "Indie Rock", "releaseDate": "2021-10-08" },
+  { "rank": 10, "song": "Example Song Ten", "artist": "Artist F", "genre": "Hip-Hop", "releaseDate": "2019-12-01" }
+]

@@ -1,21 +1,19 @@
 import { defineCollection, z } from 'astro:content';
 
-// Every tab on this site works the same way: it's a single running feed,
-// newest entries first. To add to any tab, just create a new .md file in
-// its content folder — date it, write your text as the body, and
-// optionally attach a PDF (drop the PDF in that tab's public/ folder and
-// reference the filename in `pdfFile`). No separate page per entry.
+// Every "feed" tab on this site works the same way: it's a single running
+// log, newest entries first. To add to any of them, create a new .md file
+// in its content folder — date it, write your text as the body, and
+// optionally attach a PDF or a star rating.
 const feedEntry = z.object({
   date: z.coerce.date(),
   title: z.string().optional(),
+  rating: z.number().min(0).max(5).optional(), // used by Matcha Analytics and Recent Books
   pdfFile: z.string().optional(),
 });
 
-const blog = defineCollection({ type: 'content', schema: feedEntry });
-const research = defineCollection({ type: 'content', schema: feedEntry });
-const projects = defineCollection({ type: 'content', schema: feedEntry });
-const books = defineCollection({ type: 'content', schema: feedEntry });
-const resources = defineCollection({ type: 'content', schema: feedEntry });
+const weeklySummary = defineCollection({ type: 'content', schema: feedEntry });
+const matchaAnalytics = defineCollection({ type: 'content', schema: feedEntry });
 const insights = defineCollection({ type: 'content', schema: feedEntry });
+const recentBooks = defineCollection({ type: 'content', schema: feedEntry });
 
-export const collections = { blog, research, projects, books, resources, insights };
+export const collections = { weeklySummary, matchaAnalytics, insights, recentBooks };

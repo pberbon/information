@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import songs from '../../data/songs.json';
+
+const base = import.meta.env.BASE_URL;
+const sorted = [...songs].sort((a, b) => a.rank - b.rank);
+---
+<BaseLayout title="Top 300 Songs" description="My top 300 songs, ranked.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>Top 300 Songs</h1>
+    <p style="color:var(--text-muted)">
+      To edit the list, open <code>src/data/songs.json</code> — it's a plain array of
+      <code>{'{ rank, song, artist, genre, releaseDate }'}</code> objects. Re-ranking is just
+      changing the <code>rank</code> numbers; add or remove entries the same way.
+    </p>
+
+    <div class="tag-list" style="margin: 1.25rem 0 2rem;">
+      <a class="button secondary" href={`${base}top-300-songs/by-artist/`}>Breakdown by Artist</a>
+      <a class="button secondary" href={`${base}top-300-songs/by-genre/`}>Breakdown by Genre</a>
+      <a class="button secondary" href={`${base}top-300-songs/release-dates/`}>Release Date Chart</a>
+    </div>
+
+    <ol style="padding-left: 1.5rem;">
+      {sorted.map((s) => (
+        <li style="padding: 0.35rem 0; font-size: 1.05rem;">
+          {s.song} <span style="color: var(--text-muted); font-style: italic;">({s.artist})</span>
+        </li>
+      ))}
+    </ol>
+
+    {sorted.length === 0 && <p>No songs yet — add entries to <code>src/data/songs.json</code>.</p>}
+  </div>
+</BaseLayout>

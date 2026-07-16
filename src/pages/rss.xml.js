@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { SITE } from '../site.config';
 
 export async function GET(context) {
-  const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = (await getCollection('weeklySummary')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   return rss({
     title: SITE.title,
@@ -12,7 +12,7 @@ export async function GET(context) {
     items: posts.map((post) => ({
       title: post.data.title || post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       pubDate: post.data.date,
-      link: `${import.meta.env.BASE_URL}blog/#${post.slug}`,
+      link: `${import.meta.env.BASE_URL}weekly-summary-notes/#${post.slug}`,
     })),
     customData: `<language>en-us</language>`,
   });

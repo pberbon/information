@@ -5,20 +5,22 @@ import { SITE } from '../site.config';
 
 const base = import.meta.env.BASE_URL;
 
-const blogEntries = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const researchEntries = (await getCollection('research')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const projectEntries = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const weeklyEntries = await getCollection('weeklySummary');
+const matchaEntries = await getCollection('matchaAnalytics');
+const insightEntries = await getCollection('insights');
+const bookEntries = await getCollection('recentBooks');
 
 function entryTitle(entry: any) {
   return entry.data.title || entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// "Recent additions" merges every tab's latest entries into one feed,
+// "Recent additions" merges every feed tab's latest entries into one list,
 // each linking to its tab page anchored at that specific entry.
 const recent = [
-  ...blogEntries.map((e) => ({ type: 'Blog', date: e.data.date, title: entryTitle(e), href: `${base}blog/#${e.slug}` })),
-  ...researchEntries.map((e) => ({ type: 'Research', date: e.data.date, title: entryTitle(e), href: `${base}research/#${e.slug}` })),
-  ...projectEntries.map((e) => ({ type: 'Projects', date: e.data.date, title: entryTitle(e), href: `${base}projects/#${e.slug}` })),
+  ...weeklyEntries.map((e) => ({ type: 'Weekly Summary', date: e.data.date, title: entryTitle(e), href: `${base}weekly-summary-notes/#${e.slug}` })),
+  ...matchaEntries.map((e) => ({ type: 'Matcha Analytics', date: e.data.date, title: entryTitle(e), href: `${base}matcha-analytics/#${e.slug}` })),
+  ...insightEntries.map((e) => ({ type: 'Insight of the Week', date: e.data.date, title: entryTitle(e), href: `${base}insights/#${e.slug}` })),
+  ...bookEntries.map((e) => ({ type: 'Recent Books', date: e.data.date, title: entryTitle(e), href: `${base}recent-books/#${e.slug}` })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 8);
 ---
 <BaseLayout title="Home">
@@ -27,18 +29,10 @@ const recent = [
       <h1>Hi, I'm {SITE.name}.</h1>
       <p class="lead">{SITE.tagline}</p>
       <div class="tag-list" style="margin-top:1.5rem;">
-        <a class="button" href={`${base}blog/`}>Read the Blog</a>
-        <a class="button secondary" href={`${base}research/`}>Browse Research</a>
-        <a class="button secondary" href={`${base}projects/`}>See Projects</a>
+        <a class="button" href={`${base}weekly-summary-notes/`}>Weekly Summary Notes</a>
+        <a class="button secondary" href={`${base}top-300-songs/`}>Top 300 Songs</a>
+        <a class="button secondary" href={`${base}recent-books/`}>Recent Books</a>
       </div>
-    </section>
-
-    <section>
-      <h2>Short Bio</h2>
-      <p style="max-width:680px;color:var(--text-muted)">
-        A brief biography goes here — background, current focus, and what you're working on.
-        Edit this paragraph in <code>src/pages/index.astro</code>.
-      </p>
     </section>
 
     {recent.length > 0 && (

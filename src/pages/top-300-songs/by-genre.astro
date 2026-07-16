@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import songs from '../../data/songs.json';
+
+const base = import.meta.env.BASE_URL;
+
+const byGenre = new Map<string, typeof songs>();
+for (const s of songs) {
+  if (!byGenre.has(s.genre)) byGenre.set(s.genre, []);
+  byGenre.get(s.genre)!.push(s);
+}
+const groups = [...byGenre.entries()].sort((a, b) => b[1].length - a[1].length);
+---
+<BaseLayout title="Top 300 Songs — By Genre" description="Song list broken down by genre.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <nav class="breadcrumbs"><a href={`${base}top-300-songs/`}>Top 300 Songs</a> / <span>By Genre</span></nav>
+    <h1>By Genre</h1>
+
+    {groups.map(([genre, list]) => (
+      <section style="margin-bottom: 1.75rem;">
+        <h3 style="margin-bottom: 0.4rem;">{genre} <span style="color:var(--text-muted); font-weight: 400; font-size: 0.9rem;">({list.length} song{list.length === 1 ? '' : 's'})</span></h3>
+        <ul style="margin: 0; padding-left: 1.25rem;">
+          {list.sort((a, b) => a.rank - b.rank).map((s) => (
+            <li>#{s.rank} — {s.song} <span style="color:var(--text-muted); font-style: italic;">({s.artist})</span></li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
