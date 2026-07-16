@@ -5,8 +5,8 @@
 :root {
   --bg: #ece2c9;
   --bg-elevated: #e2d5b4;
-  --text: #2a2118;
-  --text-muted: #6b5d47;
+  --text: #f5efdd;
+  --text-muted: #b3a686;
   --accent: #6e2a2a;
   --accent-contrast: #f3e9d2;
   --accent-soft: #ded0aa;
@@ -255,15 +255,6 @@ h3 { font-size: 1.4rem; }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; margin-top: 3rem; }
 .section-heading h2 { margin-top: 0; }
 .section-heading a { font-size: 0.85rem; font-family: var(--font-sans); }
-
-/* Fleuron divider between homepage sections instead of a plain rule */
-.fleuron {
-  text-align: center;
-  color: var(--brass);
-  font-size: 1.3rem;
-  margin: 3rem 0 0;
-  opacity: 0.7;
-}
 
 footer.site-footer {
   border-top: 1px solid var(--border-strong);

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && pagefind --site dist --output-subdir pagefind",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -16,7 +16,6 @@
     "astro": "^4.16.19",
     "katex": "^0.16.11",
     "mdast-util-to-string": "^4.0.0",
-    "pagefind": "^1.1.0",
     "reading-time": "^1.5.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0"

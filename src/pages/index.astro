@@ -35,7 +35,7 @@ const recent = [
       </div>
     </section>
 
-    <div class="fleuron" aria-hidden="true">❧</div>
+    
 
     <section>
       <h2>Short Bio</h2>
@@ -48,7 +48,7 @@ const recent = [
 
     {featuredPosts.length > 0 && (
       <section>
-        <div class="fleuron" aria-hidden="true">❧</div>
+        
         <div class="section-heading"><h2>Featured Blog Posts</h2><a href={`${base}blog/`}>View all &rarr;</a></div>
         <div class="card-grid">
           {featuredPosts.map((post) => (
@@ -61,8 +61,7 @@ const recent = [
 
     {featuredPapers.length > 0 && (
       <section>
-        <div class="fleuron" aria-hidden="true">❧</div>
-        <div class="section-heading"><h2>Featured Research</h2><a href={`${base}research/`}>View all &rarr;</a></div>
+        
         <div class="card-grid">
           {featuredPapers.map((paper) => (
             <Card href={`${base}research/${paper.slug}/`} title={paper.data.title} description={paper.data.description}
@@ -74,7 +73,7 @@ const recent = [
 
     {featuredProjects.length > 0 && (
       <section>
-        <div class="fleuron" aria-hidden="true">❧</div>
+        
         <div class="section-heading"><h2>Featured Projects</h2><a href={`${base}projects/`}>View all &rarr;</a></div>
         <div class="card-grid">
           {featuredProjects.map((project) => (
@@ -87,7 +86,7 @@ const recent = [
 
     {recent.length > 0 && (
       <section>
-        <div class="fleuron" aria-hidden="true">❧</div>
+        
         <h2>Recent Additions</h2>
         <ul style="padding-left:0;list-style:none;">
           {recent.map((item) => (
