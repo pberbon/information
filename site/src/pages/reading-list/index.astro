@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FeedList from '../../components/FeedList.astro';
+import { getCollection } from 'astro:content';
+
+const raw = (await getCollection('books')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const entries = await Promise.all(
+  raw.map(async (e) => ({ slug: e.slug, data: e.data, Content: (await e.render()).Content }))
+);
+---
+<BaseLayout title="Reading List" description="Books and notes, newest first.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>Reading List</h1>
+    <p style="color:var(--text-muted)">
+      A running log, newest first. To add an entry, create a new Markdown file in
+      <code>src/content/books/</code>.
+    </p>
+    <FeedList entries={entries} pdfDir="book-files" emptyMessage="Nothing here yet — add a Markdown file to src/content/books/ to get started." />
+  </div>
+</BaseLayout>

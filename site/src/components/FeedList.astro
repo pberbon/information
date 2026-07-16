@@ -1,0 +1,35 @@
+---
+// Shared by every tab's index page. Each entry is a dated chunk of text
+// with an optional title and an optional attached PDF — no separate page
+// per entry. `slug` is used as an anchor id so entries stay linkable
+// (e.g. from the homepage) even without their own route.
+interface Entry {
+  slug: string;
+  data: { date: Date; title?: string; pdfFile?: string };
+  Content: any;
+}
+interface Props {
+  entries: Entry[];
+  pdfDir: string; // folder under /public/ where this tab's PDFs live, e.g. "papers"
+  emptyMessage: string;
+}
+const { entries, pdfDir, emptyMessage } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+{entries.map(({ slug, data, Content }) => (
+  <article id={slug} style="margin: 2.5rem 0; padding-top: 1.75rem; border-top: 1px solid var(--border); scroll-margin-top: 5rem;">
+    <p style="color:var(--text-muted); font-style: italic; margin-bottom: 0.5rem;">
+      {data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+    {data.title && <h2 style="margin-top:0;">{data.title}</h2>}
+    <div class="post-body">
+      <Content />
+    </div>
+    {data.pdfFile && (
+      <a class="button secondary" href={`${base}${pdfDir}/${data.pdfFile}`} download style="margin-top: 0.75rem; display: inline-block;">
+        Download PDF
+      </a>
+    )}
+  </article>
+))}
+{entries.length === 0 && <p>{emptyMessage}</p>}

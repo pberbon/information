@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../site.config';
+
+const base = import.meta.env.BASE_URL;
+
+const blogEntries = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const researchEntries = (await getCollection('research')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const projectEntries = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function entryTitle(entry: any) {
+  return entry.data.title || entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// "Recent additions" merges every tab's latest entries into one feed,
+// each linking to its tab page anchored at that specific entry.
+const recent = [
+  ...blogEntries.map((e) => ({ type: 'Blog', date: e.data.date, title: entryTitle(e), href: `${base}blog/#${e.slug}` })),
+  ...researchEntries.map((e) => ({ type: 'Research', date: e.data.date, title: entryTitle(e), href: `${base}research/#${e.slug}` })),
+  ...projectEntries.map((e) => ({ type: 'Projects', date: e.data.date, title: entryTitle(e), href: `${base}projects/#${e.slug}` })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 8);
+---
+<BaseLayout title="Home">
+  <div class="container">
+    <section class="hero">
+      <h1>Hi, I'm {SITE.name}.</h1>
+      <p class="lead">{SITE.tagline}</p>
+      <div class="tag-list" style="margin-top:1.5rem;">
+        <a class="button" href={`${base}blog/`}>Read the Blog</a>
+        <a class="button secondary" href={`${base}research/`}>Browse Research</a>
+        <a class="button secondary" href={`${base}projects/`}>See Projects</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Short Bio</h2>
+      <p style="max-width:680px;color:var(--text-muted)">
+        A brief biography goes here — background, current focus, and what you're working on.
+        Edit this paragraph in <code>src/pages/index.astro</code>.
+      </p>
+    </section>
+
+    {recent.length > 0 && (
+      <section>
+        <h2>Recent Additions</h2>
+        <ul style="padding-left:0;list-style:none;">
+          {recent.map((item) => (
+            <li style="padding:0.6rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:1rem;">
+              <a href={item.href}>{item.title}</a>
+              <span class="card-meta" style="white-space:nowrap;">{item.type} · {item.date.toLocaleDateString()}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</BaseLayout>
