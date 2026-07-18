@@ -5,7 +5,9 @@ import pto from '../../data/pto.json';
 const usedSet = new Set(pto.usedDates.map((d) => d.date));
 const labelMap = new Map(pto.usedDates.map((d) => [d.date, d.label]));
 const usedCount = pto.usedDates.length;
-const totalDays = pto.totalDays;
+
+const holidaySet = new Set(pto.holidays.map((d) => d.date));
+const holidayLabelMap = new Map(pto.holidays.map((d) => [d.date, d.label]));
 
 // Build a range of months to page through: from January of last year
 // through December of next year. Adjust the range below if you want more
@@ -53,16 +55,15 @@ function pad(n: number) { return String(n).padStart(2, '0'); }
       it's plain HTML/Markdown-ish content right in this file.
     -->
     <p style="color:var(--text-muted)">
-      This calendar tracks the days I've taken off. Highlighted days below
-      are PTO days I've already used. To add a new one, open
-      <code>src/data/pto.json</code> and add a date (plus an optional label)
-      to the <code>usedDates</code> list — it'll show up here automatically.
-      To change your yearly allowance, edit <code>totalDays</code> in the
-      same file.
+      This calendar tracks the days I've taken off, plus company holidays.
+      To add a PTO day, open <code>src/data/pto.json</code> and add a date
+      (plus an optional label) to the <code>usedDates</code> list. To add a
+      holiday, add it to the <code>holidays</code> list the same way — both
+      show up here automatically, styled differently.
     </p>
 
     <div class="pto-counter">
-      <span class="pto-counter-number">{usedCount} / {totalDays}</span>
+      <span class="pto-counter-number">{usedCount}</span>
       <span class="pto-counter-label">PTO days used</span>
     </div>
 
@@ -86,10 +87,14 @@ function pad(n: number) { return String(n).padStart(2, '0'); }
                   if (day === null) return <span class="pto-day pto-day-empty"></span>;
                   const dateStr = `${year}-${pad(month + 1)}-${pad(day)}`;
                   const isUsed = usedSet.has(dateStr);
-                  const isWeekend = dayIndex === 0 || dayIndex === 6;
-                  const label = labelMap.get(dateStr);
+                  const isHoliday = holidaySet.has(dateStr);
+                  const isWeekend = dayIndex === 0 || dayIndex === 6; // week array is Sun-first
+                  const label = labelMap.get(dateStr) || holidayLabelMap.get(dateStr);
                   return (
-                    <span class={`pto-day ${isWeekend ? 'pto-day-weekend' : ''} ${isUsed ? 'pto-day-used' : ''}`} title={label || undefined}>
+                    <span
+                      class={`pto-day ${isWeekend ? 'pto-day-weekend' : ''} ${isHoliday ? 'pto-day-holiday' : ''} ${isUsed ? 'pto-day-used' : ''}`}
+                      title={label || undefined}
+                    >
                       {day}
                     </span>
                   );
@@ -145,6 +150,12 @@ function pad(n: number) { return String(n).padStart(2, '0'); }
       background: var(--accent);
       color: var(--accent-contrast);
       border-color: var(--accent);
+      font-weight: 600;
+    }
+    .pto-day-holiday {
+      background: var(--brass);
+      color: var(--accent-contrast);
+      border-color: var(--brass);
       font-weight: 600;
     }
     .pto-day-used {
