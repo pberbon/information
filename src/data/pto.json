@@ -1,0 +1,8 @@
+{
+  "totalDays": 20,
+  "usedDates": [
+    { "date": "2026-01-02", "label": "New Year break" },
+    { "date": "2026-03-16", "label": "Spring trip" },
+    { "date": "2026-03-17", "label": "Spring trip" }
+  ]
+}

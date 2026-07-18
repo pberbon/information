@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import pto from '../../data/pto.json';
+
+const usedSet = new Set(pto.usedDates.map((d) => d.date));
+const labelMap = new Map(pto.usedDates.map((d) => [d.date, d.label]));
+const usedCount = pto.usedDates.length;
+const totalDays = pto.totalDays;
+
+// Build a range of months to page through: from January of last year
+// through December of next year. Adjust the range below if you want more
+// or less room to scroll back/forward.
+const today = new Date();
+const startYear = today.getFullYear() - 1;
+const endYear = today.getFullYear() + 1;
+
+const months: { year: number; month: number; weeks: (number | null)[][] }[] = [];
+for (let year = startYear; year <= endYear; year++) {
+  for (let month = 0; month < 12; month++) {
+    const firstDay = new Date(year, month, 1).getDay(); // 0 = Sunday
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const weeks: (number | null)[][] = [];
+    let week: (number | null)[] = new Array(firstDay).fill(null);
+    for (let day = 1; day <= daysInMonth; day++) {
+      week.push(day);
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+    }
+    if (week.length > 0) {
+      while (week.length < 7) week.push(null);
+      weeks.push(week);
+    }
+    months.push({ year, month, weeks });
+  }
+}
+
+// Index of the current real-world month, so the calendar opens there.
+const initialIndex = months.findIndex((m) => m.year === today.getFullYear() && m.month === today.getMonth());
+
+const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const weekdayLabels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function pad(n: number) { return String(n).padStart(2, '0'); }
+---
+<BaseLayout title="PTO Calendar" description="Tracking PTO days used against my yearly allowance.">
+  <div class="prose" style="padding-top:2.5rem; max-width: 760px;">
+    <h1>PTO Calendar</h1>
+
+    <!--
+      Edit the introductory text below to describe what this page is —
+      it's plain HTML/Markdown-ish content right in this file.
+    -->
+    <p style="color:var(--text-muted)">
+      This calendar tracks the days I've taken off. Highlighted days below
+      are PTO days I've already used. To add a new one, open
+      <code>src/data/pto.json</code> and add a date (plus an optional label)
+      to the <code>usedDates</code> list — it'll show up here automatically.
+      To change your yearly allowance, edit <code>totalDays</code> in the
+      same file.
+    </p>
+
+    <div class="pto-counter">
+      <span class="pto-counter-number">{usedCount} / {totalDays}</span>
+      <span class="pto-counter-label">PTO days used</span>
+    </div>
+
+    <div class="pto-calendar" data-current={initialIndex}>
+      <div class="pto-calendar-header">
+        <button type="button" class="icon-btn" id="pto-prev" aria-label="Previous month">&larr;</button>
+        <h2 id="pto-month-label" style="margin:0; border:none; padding:0;"></h2>
+        <button type="button" class="icon-btn" id="pto-next" aria-label="Next month">&rarr;</button>
+      </div>
+
+      <div class="pto-weekdays">
+        {weekdayLabels.map((d) => <span>{d}</span>)}
+      </div>
+
+      <div class="pto-months">
+        {months.map(({ year, month, weeks }, i) => (
+          <div class="pto-month" data-index={i} data-label={`${monthNames[month]} ${year}`} style={i === initialIndex ? '' : 'display:none;'}>
+            {weeks.map((week) => (
+              <div class="pto-week">
+                {week.map((day) => {
+                  if (day === null) return <span class="pto-day pto-day-empty"></span>;
+                  const dateStr = `${year}-${pad(month + 1)}-${pad(day)}`;
+                  const isUsed = usedSet.has(dateStr);
+                  const label = labelMap.get(dateStr);
+                  return (
+                    <span class={`pto-day ${isUsed ? 'pto-day-used' : ''}`} title={label || undefined}>
+                      {day}
+                    </span>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .pto-counter {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--bg-elevated);
+      padding: 0.6rem 1rem;
+      margin: 0.5rem 0 1.75rem;
+      float: right;
+    }
+    .pto-counter-number {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .pto-counter-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .pto-calendar { clear: both; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 1.25rem; background: var(--bg-elevated); }
+    .pto-calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .pto-weekdays, .pto-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; }
+    .pto-weekdays { margin-bottom: 0.5rem; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
+    .pto-week { margin-bottom: 0.35rem; }
+    .pto-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      border: 1px solid transparent;
+    }
+    .pto-day-empty { visibility: hidden; }
+    .pto-day-used {
+      background: var(--accent);
+      color: var(--accent-contrast);
+      border-color: var(--accent);
+      font-weight: 600;
+      cursor: default;
+    }
+  </style>
+
+  <script define:vars={{ monthNames, months: months.map((m) => ({ year: m.year, month: m.month })) }}>
+    const monthEls = document.querySelectorAll('.pto-month');
+    const label = document.getElementById('pto-month-label');
+    const prevBtn = document.getElementById('pto-prev');
+    const nextBtn = document.getElementById('pto-next');
+    const calendar = document.querySelector('.pto-calendar');
+
+    let current = parseInt(calendar.dataset.current, 10);
+
+    function render() {
+      monthEls.forEach((el, i) => {
+        el.style.display = i === current ? '' : 'none';
+      });
+      const { year, month } = months[current];
+      label.textContent = `${monthNames[month]} ${year}`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === months.length - 1;
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      if (current > 0) { current--; render(); }
+    });
+    nextBtn?.addEventListener('click', () => {
+      if (current < months.length - 1) { current++; render(); }
+    });
+
+    render();
+  </script>
+</BaseLayout>

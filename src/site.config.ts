@@ -16,4 +16,5 @@ export const NAV_LINKS = [
   { href: '/top-300-songs/', label: 'Top 300 Songs' },
   { href: '/insights/', label: 'Insight of the Week' },
   { href: '/recent-books/', label: 'Recent Books' },
+  { href: '/pto-calendar/', label: 'PTO Calendar' },
 ];
