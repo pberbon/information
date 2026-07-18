@@ -142,9 +142,10 @@ function pad(n: number) { return String(n).padStart(2, '0'); }
     }
     .pto-day-empty { visibility: hidden; }
     .pto-day-weekend {
-      background: var(--accent-soft);
-      color: var(--text-muted);
-      border-color: var(--border);
+      background: var(--accent);
+      color: var(--accent-contrast);
+      border-color: var(--accent);
+      font-weight: 600;
     }
     .pto-day-used {
       background: var(--accent);
