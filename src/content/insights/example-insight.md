@@ -3,8 +3,4 @@ date: 2026-07-16
 pdfFile: "reciprocity_thoughts.pdf"
 ---
 
-This is an example entry. Delete this file once you add your own — new entries
-you add will automatically appear above this one, sorted newest first.
-
-To attach a PDF to an entry, add `pdfFile: "your-file.pdf"` to the frontmatter
-above and drop the file into `public/insights/`.
+These are some thoughts I had on the plane back from Italy about reciprocity and the role it plays in relationships. I was thinking about it because it was discussed in The Happiness Hypothesis which I had just read.
