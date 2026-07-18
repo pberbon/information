@@ -1,7 +1,7 @@
 
 {
   "usedDates": [
-    { "date": "2026-09-07", "label": "Scotland" },
+    
     { "date": "2026-09-08", "label": "Scotland" },
     { "date": "2026-09-09", "label": "Scotland" },
     { "date": "2026-09-10", "label": "Scotland" },
@@ -9,6 +9,8 @@
 
   ],
   "holidays": [
+    { "date": "2026-09-04", "label": "Labor Day" },
+    { "date": "2026-09-07", "label": "Labor Day" },
     { "date": "2026-11-26", "label": "Thanksgiving" },
     { "date": "2026-11-27", "label": "Thanksgiving" },
     { "date": "2026-12-24", "label": "Christmas"},
