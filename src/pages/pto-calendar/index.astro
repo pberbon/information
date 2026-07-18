@@ -82,13 +82,14 @@ function pad(n: number) { return String(n).padStart(2, '0'); }
           <div class="pto-month" data-index={i} data-label={`${monthNames[month]} ${year}`} style={i === initialIndex ? '' : 'display:none;'}>
             {weeks.map((week) => (
               <div class="pto-week">
-                {week.map((day) => {
+                {week.map((day, dayIndex) => {
                   if (day === null) return <span class="pto-day pto-day-empty"></span>;
                   const dateStr = `${year}-${pad(month + 1)}-${pad(day)}`;
                   const isUsed = usedSet.has(dateStr);
+                  const isWeekend = dayIndex === 0 || dayIndex === 6;
                   const label = labelMap.get(dateStr);
                   return (
-                    <span class={`pto-day ${isUsed ? 'pto-day-used' : ''}`} title={label || undefined}>
+                    <span class={`pto-day ${isWeekend ? 'pto-day-weekend' : ''} ${isUsed ? 'pto-day-used' : ''}`} title={label || undefined}>
                       {day}
                     </span>
                   );
@@ -140,6 +141,11 @@ function pad(n: number) { return String(n).padStart(2, '0'); }
       border: 1px solid transparent;
     }
     .pto-day-empty { visibility: hidden; }
+    .pto-day-weekend {
+      background: var(--accent-soft);
+      color: var(--text-muted);
+      border-color: var(--border);
+    }
     .pto-day-used {
       background: var(--accent);
       color: var(--accent-contrast);
