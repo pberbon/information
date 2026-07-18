@@ -1,5 +1,6 @@
 ---
 date: 2026-07-16
+pdfFile: "reciprocity_thoughts.pdf"
 ---
 
 This is an example entry. Delete this file once you add your own — new entries
