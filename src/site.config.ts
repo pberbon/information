@@ -11,6 +11,7 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
+   { href: '/', label: 'Home' },
   { href: '/weekly-summary-notes/', label: 'Weekly Summary Notes' },
   { href: '/matcha-analytics/', label: 'Matcha Analytics' },
   { href: '/top-300-songs/', label: 'Top 300 Songs' },
