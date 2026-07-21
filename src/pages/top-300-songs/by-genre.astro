@@ -10,21 +10,107 @@ for (const s of songs) {
   byGenre.get(s.genre)!.push(s);
 }
 const groups = [...byGenre.entries()].sort((a, b) => b[1].length - a[1].length);
+const maxCount = Math.max(1, ...groups.map(([, list]) => list.length));
+
+const rowHeight = 34;
+const chartWidth = 800;
+const labelWidth = 180;
+const padding = { top: 10, right: 60, bottom: 10 };
+const plotWidth = chartWidth - labelWidth - padding.right;
+const chartHeight = groups.length * rowHeight + padding.top + padding.bottom;
+
+function slug(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
 ---
 <BaseLayout title="Top 300 Songs — By Genre" description="Song list broken down by genre.">
-  <div class="prose" style="padding-top:2.5rem;">
+  <div class="prose" style="padding-top:2.5rem; max-width: 900px;">
     <nav class="breadcrumbs"><a href={`${base}top-300-songs/`}>Top 300 Songs</a> / <span>By Genre</span></nav>
     <h1>By Genre</h1>
+    <p style="color:var(--text-muted)">Number of songs on the list per genre, most to least. Click a bar to see its songs.</p>
 
-    {groups.map(([genre, list]) => (
-      <section style="margin-bottom: 1.75rem;">
-        <h3 style="margin-bottom: 0.4rem;">{genre} <span style="color:var(--text-muted); font-weight: 400; font-size: 0.9rem;">({list.length} song{list.length === 1 ? '' : 's'})</span></h3>
-        <ul style="margin: 0; padding-left: 1.25rem;">
-          {list.sort((a, b) => a.rank - b.rank).map((s) => (
-            <li>#{s.rank} — {s.song} <span style="color:var(--text-muted); font-style: italic;">({s.artist})</span></li>
-          ))}
-        </ul>
-      </section>
-    ))}
+    {groups.length > 0 ? (
+      <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} style="width: 100%; height: auto; font-family: var(--font-serif);">
+        {groups.map(([genre, list], i) => {
+          const count = list.length;
+          const barWidth = (count / maxCount) * plotWidth;
+          const y = padding.top + i * rowHeight;
+          const barHeight = rowHeight * 0.6;
+          const barY = y + (rowHeight - barHeight) / 2;
+          const targetId = `genre-${slug(genre)}`;
+          return (
+            <g class="chart-bar-group" data-target={targetId} role="button" tabindex="0" aria-expanded="false" style="cursor: pointer;">
+              <rect x="0" y={y} width={chartWidth} height={rowHeight} fill="transparent" />
+              <text x={labelWidth - 10} y={y + rowHeight / 2 + 4} text-anchor="end" font-size="13" fill="var(--text)">{genre}</text>
+              <rect class="chart-bar" x={labelWidth} y={barY} width={Math.max(barWidth, 1)} height={barHeight} fill="var(--brass)" stroke="var(--border-strong)" stroke-width="1" />
+              <text x={labelWidth + barWidth + 8} y={y + rowHeight / 2 + 4} font-size="13" fill="var(--text-muted)">{count}</text>
+            </g>
+          );
+        })}
+      </svg>
+    ) : (
+      <p>No songs yet — add entries to <code>src/data/songs.json</code>.</p>
+    )}
+
+    <div id="chart-detail-panel" style="margin-top: 1.5rem;">
+      <p id="chart-detail-empty" style="color: var(--text-muted); font-style: italic;">Click a bar above to see the songs for that genre.</p>
+      {groups.map(([genre, list]) => (
+        <section id={`genre-${slug(genre)}`} class="chart-detail-section" style="display:none; margin-bottom: 1.75rem;">
+          <h3 style="margin-bottom: 0.4rem;">{genre} <span style="color:var(--text-muted); font-weight: 400; font-size: 0.9rem;">({list.length} song{list.length === 1 ? '' : 's'})</span></h3>
+          <ul style="margin: 0; padding-left: 1.25rem;">
+            {list.sort((a, b) => a.rank - b.rank).map((s) => (
+              <li>#{s.rank} — {s.song} <span style="color:var(--text-muted); font-style: italic;">({s.artist})</span></li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
   </div>
+
+  <style>
+    .chart-bar-group:hover .chart-bar, .chart-bar-group:focus-visible .chart-bar {
+      opacity: 0.75;
+    }
+    .chart-bar-group[aria-expanded="true"] .chart-bar {
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+  </style>
+
+  <script>
+    const groups = document.querySelectorAll('.chart-bar-group');
+    const sections = document.querySelectorAll('.chart-detail-section');
+    const emptyMessage = document.getElementById('chart-detail-empty');
+
+    function showTarget(targetId: string | null) {
+      let anyVisible = false;
+      sections.forEach((section) => {
+        const match = section.id === targetId;
+        (section as HTMLElement).style.display = match ? 'block' : 'none';
+        if (match) anyVisible = true;
+      });
+      groups.forEach((g) => {
+        g.setAttribute('aria-expanded', String(g.getAttribute('data-target') === targetId));
+      });
+      if (emptyMessage) (emptyMessage as HTMLElement).style.display = anyVisible ? 'none' : 'block';
+      if (anyVisible) {
+        document.getElementById(targetId!)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    groups.forEach((g) => {
+      const targetId = g.getAttribute('data-target');
+      const toggle = () => {
+        const isOpen = g.getAttribute('aria-expanded') === 'true';
+        showTarget(isOpen ? null : targetId);
+      };
+      g.addEventListener('click', toggle);
+      g.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          toggle();
+        }
+      });
+    });
+  </script>
 </BaseLayout>
