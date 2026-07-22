@@ -27,7 +27,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
       <form id="recommend-form" data-endpoint={FORMSPREE_ENDPOINT} style="display:flex; flex-direction:column; gap:0.75rem; max-width:480px;">
         <input type="text" name="recommender" placeholder="Your name (optional)" autocomplete="off"
           style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
-        <input type="text" name="book" placeholder="Book title and author" required autocomplete="off"
+        <input type="text" name="book" placeholder="Title and author/director" required autocomplete="off"
           style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
         <textarea name="reason" placeholder="Why you're recommending it" rows="3" autocomplete="off"
           style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);"></textarea>
@@ -74,7 +74,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
           body: new FormData(form),
         });
         if (response.ok) {
-          status.textContent = 'Thanks — your recommendation was sent!';
+          status.textContent = 'Thank you for the rec!';
           status.style.color = 'var(--brass)';
           form.reset();
         } else {
