@@ -7,15 +7,85 @@ const raw = (await getCollection('recentBooks')).sort((a, b) => b.data.date.valu
 const entries = await Promise.all(
   raw.map(async (e) => ({ slug: e.slug, data: e.data, Content: (await e.render()).Content }))
 );
+
+// Set this to your Formspree form ID (see the comment in the form below for
+// how to get one) so recommendations actually reach you by email.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
 ---
 <BaseLayout title="Recent Books" description="Books, ranked, newest first.">
   <div class="prose" style="padding-top:2.5rem;">
     <h1>Recent Books</h1>
     <p style="color:var(--text-muted)">
-      A running log of books with a star rating out of 5, newest first. To add one, create a new
-      Markdown file in <code>src/content/recentBooks/</code> — use <code>title</code> for the book
-      (e.g. "Book Title — Author") and <code>rating</code> (0–5).
+      I will post my thoughts and ratings on media I consume. I would love recommendations, which can be added through the interface.
     </p>
+
+    <div class="recommend-box">
+      <h3 style="margin-top:0;">Recommend a book</h3>
+      <p style="color:var(--text-muted); font-size:0.9rem;">
+        Fill this out and press Enter (or click Submit) — it comes straight to me by email.
+      </p>
+
+      <form id="recommend-form" data-endpoint={FORMSPREE_ENDPOINT} style="display:flex; flex-direction:column; gap:0.75rem; max-width:480px;">
+        <input type="text" name="name" placeholder="Your name (optional)"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);" />
+        <input type="text" name="book" placeholder="Book title and author" required
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);" />
+        <textarea name="reason" placeholder="Why you're recommending it (optional)" rows="3"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);"></textarea>
+        <button type="submit" class="button" style="align-self:flex-start;">Submit Recommendation</button>
+        <p id="recommend-status" style="margin: 0; font-size: 0.9rem;"></p>
+      </form>
+    </div>
+
     <FeedList entries={entries} pdfDir="recent-books-files" emptyMessage="Nothing here yet — add a Markdown file to src/content/recentBooks/ to get started." />
   </div>
+
+  <style>
+    .recommend-box {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--bg-elevated);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0 2rem;
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('recommend-form') as HTMLFormElement | null;
+    const status = document.getElementById('recommend-status');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const endpoint = form.dataset.endpoint;
+      if (!status) return;
+
+      if (!endpoint || endpoint.includes('YOUR_FORM_ID')) {
+        status.textContent = 'This form isn\'t connected yet — set FORMSPREE_ENDPOINT in recent-books/index.astro.';
+        status.style.color = 'var(--accent)';
+        return;
+      }
+
+      status.textContent = 'Sending…';
+      status.style.color = 'var(--text-muted)';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        if (response.ok) {
+          status.textContent = 'Thanks — your recommendation was sent!';
+          status.style.color = 'var(--brass)';
+          form.reset();
+        } else {
+          status.textContent = 'Something went wrong — please try again.';
+          status.style.color = 'var(--accent)';
+        }
+      } catch {
+        status.textContent = 'Something went wrong — please try again.';
+        status.style.color = 'var(--accent)';
+      }
+    });
+  </script>
 </BaseLayout>
