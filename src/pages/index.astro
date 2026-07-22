@@ -20,7 +20,7 @@ const recent = [
   ...weeklyEntries.map((e) => ({ type: 'Weekly Summary', date: e.data.date, title: entryTitle(e), href: `${base}weekly-summary-notes/#${e.slug}` })),
   ...matchaEntries.map((e) => ({ type: 'Matcha Analytics', date: e.data.date, title: entryTitle(e), href: `${base}matcha-analytics/#${e.slug}` })),
   ...insightEntries.map((e) => ({ type: 'Insight of the Week', date: e.data.date, title: entryTitle(e), href: `${base}insights/#${e.slug}` })),
-  ...bookEntries.map((e) => ({ type: 'Recent Books', date: e.data.date, title: entryTitle(e), href: `${base}recent-books/#${e.slug}` })),
+  ...bookEntries.map((e) => ({ type: 'Media Reviews', date: e.data.date, title: entryTitle(e), href: `${base}recent-books/#${e.slug}` })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 8);
 ---
 <BaseLayout title="Home">
