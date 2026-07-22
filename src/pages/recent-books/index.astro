@@ -26,12 +26,12 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
       </p>
 
       <form id="recommend-form" data-endpoint={FORMSPREE_ENDPOINT} style="display:flex; flex-direction:column; gap:0.75rem; max-width:480px;">
-        <input type="text" name="name" placeholder="Your name (optional)"
-          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);" />
-        <input type="text" name="book" placeholder="Book title and author" required
-          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);" />
-        <textarea name="reason" placeholder="Why you're recommending it (optional)" rows="3"
-          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);"></textarea>
+        <input type="text" name="recommender" placeholder="Your name (optional)" autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
+        <input type="text" name="book" placeholder="Book title and author" required autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
+        <textarea name="reason" placeholder="Why you're recommending it" rows="3" autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);"></textarea>
         <button type="submit" class="button" style="align-self:flex-start;">Submit Recommendation</button>
         <p id="recommend-status" style="margin: 0; font-size: 0.9rem;"></p>
       </form>
