@@ -25,7 +25,9 @@ function slug(s: string) {
 ---
 <BaseLayout title="Top 300 Songs — By Genre" description="Song list broken down by genre.">
   <div class="prose" style="padding-top:2.5rem; max-width: 900px;">
-    <a class="button secondary" href={`${base}top-300-songs/`} style="margin-bottom: 1.25rem; display: inline-flex;">&larr; Back to Top 300 Songs</a>
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+  <a class="button secondary" href={`${base}top-300-songs/`}>&larr; Back to Top 300 Songs</a>
+</div>
     <nav class="breadcrumbs"><a href={`${base}top-300-songs/`}>Top 300 Songs</a> / <span>By Genre</span></nav>
     <h1>By Genre</h1>
     <p style="color:var(--text-muted)">Number of songs on the list per genre, most to least. Click a bar to see its songs.</p>

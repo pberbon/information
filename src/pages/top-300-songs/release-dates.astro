@@ -54,7 +54,9 @@ const areaPath = points.length > 0
 ---
 <BaseLayout title="Top 300 Songs — Release Dates" description="Chart of release dates across the song list, one bucket per year (pre-2000 combined).">
   <div class="prose" style="padding-top:2.5rem; max-width: 900px;">
-    <a class="button secondary" href={`${base}top-300-songs/`} style="margin-bottom: 1.25rem; display: inline-flex;">&larr; Back to Top 300 Songs</a>
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+  <a class="button secondary" href={`${base}top-300-songs/`}>&larr; Back to Top 300 Songs</a>
+</div>
     <nav class="breadcrumbs"><a href={`${base}top-300-songs/`}>Top 300 Songs</a> / <span>Release Dates</span></nav>
     <h1>Release Dates</h1>
     <p style="color:var(--text-muted)">Number of songs released per year (everything before 2000 is combined into one bucket).</p>
