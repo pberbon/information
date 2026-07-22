@@ -12,7 +12,7 @@ const entries = await Promise.all(
 // how to get one) so recommendations actually reach you by email.
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
 ---
-<BaseLayout title="Recent Books" description="Books, ranked, newest first.">
+<BaseLayout title="Recent Media">
   <div class="prose" style="padding-top:2.5rem;">
     <h1>Recent Books</h1>
     <p style="color:var(--text-muted)">
@@ -20,9 +20,8 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
     </p>
 
     <div class="recommend-box">
-      <h3 style="margin-top:0;">Recommend a book</h3>
+      <h3 style="margin-top:0;">Recommend something!</h3>
       <p style="color:var(--text-muted); font-size:0.9rem;">
-        Fill this out and press Enter (or click Submit) — it comes straight to me by email.
       </p>
 
       <form id="recommend-form" data-endpoint={FORMSPREE_ENDPOINT} style="display:flex; flex-direction:column; gap:0.75rem; max-width:480px;">
