@@ -4,25 +4,33 @@ import songs from '../../data/songs.json';
 
 const base = import.meta.env.BASE_URL;
 
-// Group songs into 5-year buckets by release year, then plot count-per-bucket
-// as a filled line chart — still a line graph, just coarser on the x-axis.
-const bucketSize = 5;
-function bucketStart(year: number) {
-  return Math.floor(year / bucketSize) * bucketSize;
-}
+// Group songs by release year, one bucket per year — except everything
+// before 2000, which is collapsed into a single "Pre-2000" bucket so the
+// chart doesn't waste width on sparse early decades.
+const cutoff = 2000;
+const countsByBucket = new Map<string, number>();
 
-const countsByBucket = new Map<number, number>();
 for (const s of songs) {
   const year = new Date(s.releaseDate).getFullYear();
-  const bucket = bucketStart(year);
-  countsByBucket.set(bucket, (countsByBucket.get(bucket) || 0) + 1);
+  const key = year < cutoff ? 'pre' : String(year);
+  countsByBucket.set(key, (countsByBucket.get(key) || 0) + 1);
 }
 
-const bucketKeys = [...countsByBucket.keys()];
-const minBucket = Math.min(...bucketKeys);
-const maxBucket = Math.max(...bucketKeys);
-const buckets: number[] = [];
-for (let b = minBucket; b <= maxBucket; b += bucketSize) buckets.push(b);
+const hasPre = countsByBucket.has('pre');
+const yearKeys = [...countsByBucket.keys()].filter((k) => k !== 'pre').map(Number);
+
+let filledYears: number[] = [];
+if (yearKeys.length > 0) {
+  const minYear = Math.min(...yearKeys);
+  const maxYear = Math.max(...yearKeys);
+  for (let y = minYear; y <= maxYear; y++) filledYears.push(y);
+}
+
+const bucketKeys = [...(hasPre ? ['pre'] : []), ...filledYears.map(String)];
+
+function bucketLabel(key: string) {
+  return key === 'pre' ? 'Pre-2000' : key;
+}
 
 const maxCount = Math.max(1, ...countsByBucket.values());
 
@@ -32,11 +40,11 @@ const padding = { top: 30, right: 30, bottom: 50, left: 40 };
 const plotWidth = chartWidth - padding.left - padding.right;
 const plotHeight = chartHeight - padding.top - padding.bottom;
 
-const points = buckets.map((bucket, i) => {
-  const count = countsByBucket.get(bucket) || 0;
-  const x = buckets.length > 1 ? padding.left + (i / (buckets.length - 1)) * plotWidth : padding.left + plotWidth / 2;
+const points = bucketKeys.map((key, i) => {
+  const count = countsByBucket.get(key) || 0;
+  const x = bucketKeys.length > 1 ? padding.left + (i / (bucketKeys.length - 1)) * plotWidth : padding.left + plotWidth / 2;
   const y = chartHeight - padding.bottom - (count / maxCount) * plotHeight;
-  return { bucket, count, x, y };
+  return { key, count, x, y };
 });
 
 const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
@@ -44,11 +52,11 @@ const areaPath = points.length > 0
   ? `${linePath} L ${points[points.length - 1].x} ${chartHeight - padding.bottom} L ${points[0].x} ${chartHeight - padding.bottom} Z`
   : '';
 ---
-<BaseLayout title="Top 300 Songs — Release Dates" description="Chart of release dates across the song list, grouped into 5-year buckets.">
+<BaseLayout title="Top 300 Songs — Release Dates" description="Chart of release dates across the song list, one bucket per year (pre-2000 combined).">
   <div class="prose" style="padding-top:2.5rem; max-width: 900px;">
     <nav class="breadcrumbs"><a href={`${base}top-300-songs/`}>Top 300 Songs</a> / <span>Release Dates</span></nav>
     <h1>Release Dates</h1>
-    <p style="color:var(--text-muted)">Number of songs released per 5-year period.</p>
+    <p style="color:var(--text-muted)">Number of songs released per year (everything before 2000 is combined into one bucket).</p>
 
     {points.length > 0 ? (
       <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} style="width: 100%; height: auto; font-family: var(--font-serif);">
@@ -60,10 +68,10 @@ const areaPath = points.length > 0
         {points.map((p) => (
           <g>
             <circle cx={p.x} cy={p.y} r="4" fill="var(--accent)" stroke="var(--bg)" stroke-width="1.5">
-              <title>{`${p.bucket}–${p.bucket + bucketSize - 1}: ${p.count} song${p.count === 1 ? '' : 's'}`}</title>
+              <title>{`${bucketLabel(p.key)}: ${p.count} song${p.count === 1 ? '' : 's'}`}</title>
             </circle>
             <text x={p.x} y={p.y - 12} text-anchor="middle" font-size="12" fill="var(--text)">{p.count}</text>
-            <text x={p.x} y={chartHeight - padding.bottom + 20} text-anchor="middle" font-size="12" fill="var(--text-muted)">{p.bucket}–{p.bucket + bucketSize - 1}</text>
+            <text x={p.x} y={chartHeight - padding.bottom + 20} text-anchor="middle" font-size="11" fill="var(--text-muted)" transform={`rotate(-45, ${p.x}, ${chartHeight - padding.bottom + 20})`}>{bucketLabel(p.key)}</text>
           </g>
         ))}
       </svg>
