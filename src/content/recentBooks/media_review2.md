@@ -1,7 +1,7 @@
 ---
 date: 2026-07-21
 title: "The Odyssey - Christopher Nolan"
-rating: 4.5
+rating: 4.3
 ---
 
 The actual production of this movie was quite incredible, and though there are some minor details I could nitpick, it was a great cinematic experience overall. 
