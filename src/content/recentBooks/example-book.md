@@ -1,7 +1,7 @@
 ---
 date: 2026-07-01
 title: "The Happiness Hypothesis - Jonathan Haidt"
-rating: 4
+rating: 3.8
 ---
 
 The book made a compelling argument that the way we traditionally think about "being happy" is not useful or accurate, and uses a number of interesting studies and facts to illustrate this idea. As always, I have doubts about the efficacy of some of these psychology studies, but I think they're almost all directionally correct, which is all he claims. 
