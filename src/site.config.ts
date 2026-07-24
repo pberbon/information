@@ -4,7 +4,7 @@ export const SITE = {
   name: 'Patrick Berbon',
   title: 'Patrick Berbon',
   tagline: "Weekly notes, matcha tasting logs, a running song ranking, and whatever else I'm into.",
-  email: 'you@example.com',
+  email: 'patrick.z.berbon@gmail.com',
   github: 'https://github.com/your-username',
   linkedin: 'https://linkedin.com/in/your-username',
   twitter: '',
@@ -12,10 +12,10 @@ export const SITE = {
 
 export const NAV_LINKS = [
    { href: '/', label: 'Home' },
-  { href: '/weekly-summary-notes/', label: 'Weekly Summary Notes' },
+  { href: '/weekly-summary-notes/', label: 'Concise Summary' },
   { href: '/matcha-analytics/', label: 'Matcha Analytics' },
-  { href: '/top-300-songs/', label: 'Top 300 Songs' },
+  { href: '/top-300-songs/', label: '150 Songs' },
   { href: '/insights/', label: 'Insight of the Week' },
-  { href: '/recent-books/', label: 'Recent Books' },
+  { href: '/recent-books/', label: 'Media Review' },
   { href: '/pto-calendar/', label: 'PTO Calendar' },
 ];
