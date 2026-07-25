@@ -1,6 +1,6 @@
 ---
 date: 2026-06-30
-title: "First work matcha"
+title: "First work matcha (standard)"
 rating: 2.6
 ---
 
