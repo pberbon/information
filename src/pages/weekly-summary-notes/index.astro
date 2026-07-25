@@ -8,12 +8,14 @@ const entries = await Promise.all(
   raw.map(async (e) => ({ slug: e.slug, data: e.data, Content: (await e.render()).Content }))
 );
 ---
-<BaseLayout title="Weekly Summary Notes" description="A weekly update, newest first.">
+<BaseLayout title="Weekly Rose Bud Thorn" description="A weekly update, newest first.">
   <div class="prose" style="padding-top:2.5rem;">
     <h1>Weekly Summary Notes</h1>
     <p style="color:var(--text-muted)">
-      A running log, newest first. To add this week's entry, create a new Markdown file in
-      <code>src/content/weeklySummary/</code>.
+      I think despite the bad press that this is one of the GOAT methods for summarizing a period of time. In terms of defining what can be a single rose bud or thorn, I am restricting myself from using general concepts or prolonged statuses. 
+      I've settled on this: each rose/bud/thorn can only be within a single 3-hour window, and it has to be a sinlge distinct thing.
+
+      Rose, Bud, Thorn is a simple reflection and feedback framework used to identify a positive highlight (Rose), an opportunity for growth or future potential (Bud), and a challenge or difficulty (Thorn). It is widely used in team project reviews, daily gratitude check-ins, and classroom settings
     </p>
     <FeedList entries={entries} pdfDir="weekly-summary-files" emptyMessage="Nothing here yet — add a Markdown file to src/content/weeklySummary/ to get started." />
   </div>

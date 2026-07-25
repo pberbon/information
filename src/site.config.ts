@@ -12,7 +12,7 @@ export const SITE = {
 
 export const NAV_LINKS = [
    { href: '/', label: 'Home' },
-  { href: '/weekly-summary-notes/', label: 'Concise Summary' },
+  { href: '/weekly-summary-notes/', label: 'Weekly Rose Bud Thorn' },
   { href: '/matcha-analytics/', label: 'Matcha Analytics' },
   { href: '/top-300-songs/', label: '150 Songs' },
   { href: '/insights/', label: 'Insight of the Week' },
