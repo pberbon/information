@@ -1,11 +1,13 @@
 ---
+import RoseBudThorn from './RoseBudThorn.astro';
+
 // Shared by every "feed" tab. Each entry is a dated chunk of text with an
 // optional title, an optional star rating, and an optional attached PDF —
 // no separate page per entry. `slug` is used as an anchor id so entries
 // stay linkable (e.g. from the homepage) even without their own route.
 interface Entry {
   slug: string;
-  data: { date: Date; title?: string; rating?: number; pdfFile?: string };
+  data: { date: Date; title?: string; rating?: number; pdfFile?: string; rose?: string; bud?: string; thorn?: string };
   Content: any;
 }
 interface Props {
@@ -37,6 +39,9 @@ const base = import.meta.env.BASE_URL;
         </div>
       );
     })()}
+    {data.rose && data.bud && data.thorn && (
+      <RoseBudThorn rose={data.rose} bud={data.bud} thorn={data.thorn} />
+    )}
     <div class="post-body">
       <Content />
     </div>

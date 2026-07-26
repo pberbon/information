@@ -1,10 +1,8 @@
 ---
-date: 2026-06-28
-title: "Fun things in the city"
+date: 2026-07-26
+title: "Week of July 26"
+rose: "On Wednesday I went to NYC to visit the Math Museum with Paige. On the way there, we stopped for Ramen, and we talked through some questions from a question randomization web-app that I made for safari. Essentially it just goes through an initial list of 24 questions I added to it, and then we talk about our answers and the person rates the question. There’s a live ranking of all the questions and a relegation system for the lowest 3 questions which sends them to the G-league. I feel like we had generally meaningful discussions, and it was great to just chat with her."
+bud: "This might be crazy but the warm-matcha inspiration (detailed in the description of “matcha analytics”) is the first thing that comes to mind. Some other things like touring apartments may technically have been more useful and generated more future value but it has been so pleasant sampling all these different matchas at work and I think I wouldn’t have felt as compelled to do so if not for this revelation."
+thorn: "Something that was hard"
 ---
 
-On Wednesday I went to NYC to see Paige. We met up at Grand Central around 10:30 and then went to get Ramen at a nearby store. While there, we talked through some questions from a question randomization web-app that I made for safari. Essentially it just goes through an initial list of 24 questions I added to it, and then we talk about our answers and the person rates the question. There’s a live ranking of all the questions and a relegation system for the lowest 3 questions which sends them to the G-league. I feel like we had generally meaningful discussions and the questions worked well to facilitate that. Afterwards, we went to the Math Museum, which was interesting but felt very unfinished. My favorite exhibit was one where you went back and forth in front of a screen that measured your 2-dimensional position, velocity, and acceleration. There were games where you had to get your position/velocity within certain bands that shifted to the left on the time-x graph which was awesome. Generally, I think the exhibits did a good job building spatial/geometric intuition for mathematical concepts, and the staff were very nice.
-
-On Thursday, I met up with Evan & Dionne for Lunch in NYC. We had Ramen again, as I was inspired by the last great outing to a Ramen restaurant. This place was slightly worse but also slightly cheaper, I think similar value overall. After lunch, I went to see Evan’s apartment for the first time. We did miscellaneous activities for a while, including overviewing the installation of an AC unit, and then Evan cooked up an incredibly impressive dinner with his chef skills. I was swept off my feet and enjoyed it a lot. We then went to a bar to watch the Sweden-Japan match before I returned to beautiful Connecticut.
-
-Friday, Saturday, and Sunday were relaxing and I got to spend additional time with the Butler family which is always good.
