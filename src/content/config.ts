@@ -9,6 +9,9 @@ const feedEntry = z.object({
   title: z.string().optional(),
   rating: z.number().min(0).max(5).optional(), // used by Matcha Analytics and Recent Books
   pdfFile: z.string().optional(),
+  rose: z.string().optional(),
+  bud: z.string().optional(),
+  thorn: z.string().optional(),
 });
 
 const weeklySummary = defineCollection({ type: 'content', schema: feedEntry });
