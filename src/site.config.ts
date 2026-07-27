@@ -18,4 +18,5 @@ export const NAV_LINKS = [
   { href: '/insights/', label: 'Insight of the Week' },
   { href: '/recent-books/', label: 'Media Review' },
   { href: '/pto-calendar/', label: 'PTO Calendar' },
+  { href: '/question-of-the-week/', label: 'Question of the Week' },
 ];
