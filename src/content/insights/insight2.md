@@ -1,5 +1,5 @@
 ---
-date: 2026-06-19
+date: 2026-07-19
 pdfFile: "Learning.pdf"
 ---
 

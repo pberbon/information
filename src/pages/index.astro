@@ -1,52 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import { SITE } from '../site.config';
-
-const base = import.meta.env.BASE_URL;
-
-const weeklyEntries = await getCollection('weeklySummary');
-const matchaEntries = await getCollection('matchaAnalytics');
-const insightEntries = await getCollection('insights');
-const bookEntries = await getCollection('recentBooks');
-
-function entryTitle(entry: any) {
-  return entry.data.title || entry.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-// "Recent additions" merges every feed tab's latest entries into one list,
-// each linking to its tab page anchored at that specific entry.
-const recent = [
-  ...weeklyEntries.map((e) => ({ type: 'Weekly Summary', date: e.data.date, title: entryTitle(e), href: `${base}weekly-summary-notes/#${e.slug}` })),
-  ...matchaEntries.map((e) => ({ type: 'Matcha Analytics', date: e.data.date, title: entryTitle(e), href: `${base}matcha-analytics/#${e.slug}` })),
-  ...insightEntries.map((e) => ({ type: 'Insight of the Week', date: e.data.date, title: entryTitle(e), href: `${base}insights/#${e.slug}` })),
-  ...bookEntries.map((e) => ({ type: 'Media Reviews', date: e.data.date, title: entryTitle(e), href: `${base}recent-books/#${e.slug}` })),
-].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 8);
 ---
 <BaseLayout title="Home">
-  <div class="container">
-    <section class="hero">
-      <h1>Hi, I'm {SITE.name}.</h1>
-      <p class="lead">{SITE.tagline}</p>
-      <div class="tag-list" style="margin-top:1.5rem;">
-        <a class="button" href={`${base}weekly-summary-notes/`}>Weekly Summary Notes</a>
-        <a class="button secondary" href={`${base}top-300-songs/`}>Top 300 Songs</a>
-        <a class="button secondary" href={`${base}recent-books/`}>Recent Books</a>
-      </div>
-    </section>
+  <div class="prose" style="padding-top:4rem; padding-bottom:4rem;">
+    <p>
+      Now that I am working a full-time job, one of the biggest changes has simply been having less time in the day. When I think about times in my life where I've had a lot of free time, like college, there is still natural variation in the shape of that time - some of it was spent having meaningful conversations, doing novel activities, etc. while other parts were spent relaxing, thinking, and doing things more passively. These are both important, because they each provide value in their own ways and are naturally synergistic (I find that for myself, while I enjoy things like going out and having fun, this is often complimented by a more restorative/recharging activity). 
 
-    {recent.length > 0 && (
-      <section>
-        <h2>Recent Additions</h2>
-        <ul style="padding-left:0;list-style:none;">
-          {recent.map((item) => (
-            <li style="padding:0.6rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:1rem;">
-              <a href={item.href}>{item.title}</a>
-              <span class="card-meta" style="white-space:nowrap;">{item.type} · {item.date.toLocaleDateString()}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+As total time has been reduced, I feel like I've naturally reduced these in equal quantities, but I think this isn't optimal because (1) work can provide some of the restorative aspect (it is structured, engaging, and occupies time without requiring me to actively plan) and (2) the value of meaningful social time is a function of both allocated time and total time (if you talked to someone once a week instead of once a day, there may be more to say in the conversation/ it may be more novel/ you can better assign it within your schedule), which is to say that in certain ways there are diminishing returns to this sort of time-expenditure, making it marginally more valuable as total free time decreases.  
+
+This has also changed how I think about communication. My natural tendency is to communicate in detail: I like sharing context, talking through things, and enjoy the same from other people. But with fewer hours available, there is a tension between being thorough and being efficient. Planning itself is also more difficult because (1) there is less time to plan things into, making it mechanically harder, and (2) there’s less time to plan. 
+
+As such, I've decided to host this repository (for lack of a better word, I'd call it a blog) with various different items. The general idea is that this asynchronous way of sharing things with people will help to advance the relationships I have in an efficient way. Each tab has its own purpose or idea behind it, which is listed as a description. I may also add or remove tabs as time progresses.
+
+    </p>
+    <p>
+      Add as many paragraphs as you want by copying this block. Each one will
+      render with the same spacing and typography as the rest of the site's
+      long-form text.
+    </p>
   </div>
 </BaseLayout>
