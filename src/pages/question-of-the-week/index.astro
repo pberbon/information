@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FeedList from '../../components/FeedList.astro';
+import { getCollection } from 'astro:content';
+
+const raw = (await getCollection('questionOfWeek')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const entries = await Promise.all(
+  raw.map(async (e) => ({ slug: e.slug, data: e.data, Content: (await e.render()).Content }))
+);
+
+// Same Formspree endpoint used on Recent Books.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
+---
+<BaseLayout title="Question of the Week" description="A question to sit with each week.">
+  <div class="prose" style="padding-top:2.5rem;">
+    <h1>Question of the Week</h1>
+    <p style="color:var(--text-muted)">
+      A running log, newest first. To add this week's question, create a new Markdown file in
+      <code>src/content/questionOfWeek/</code>. Each question has its own response box below it.
+    </p>
+    <FeedList
+      entries={entries}
+      pdfDir="question-of-the-week-files"
+      emptyMessage="Nothing here yet — add a Markdown file to src/content/questionOfWeek/ to get started."
+      responseFormEndpoint={FORMSPREE_ENDPOINT}
+    />
+  </div>
+</BaseLayout>

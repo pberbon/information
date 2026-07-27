@@ -14,8 +14,9 @@ interface Props {
   entries: Entry[];
   pdfDir: string; // folder under /public/ where this tab's PDFs live, e.g. "papers"
   emptyMessage: string;
+  responseFormEndpoint?: string; // if set, each entry gets its own "submit a response" box
 }
-const { entries, pdfDir, emptyMessage } = Astro.props;
+const { entries, pdfDir, emptyMessage, responseFormEndpoint } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
 {entries.map(({ slug, data, Content }) => (
@@ -50,6 +51,79 @@ const base = import.meta.env.BASE_URL;
         Download PDF
       </a>
     )}
+
+    {responseFormEndpoint && (
+      <div class="response-box">
+        <form class="response-form" data-endpoint={responseFormEndpoint} data-question={data.title || slug}>
+          <input type="text" name="respondent" placeholder="Your name (optional)" autocomplete="off"
+            style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
+          <textarea name="answer" placeholder="Your response" rows="3" required autocomplete="off"
+            style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);"></textarea>
+          <input type="hidden" name="question" value={data.title || slug} />
+          <button type="submit" class="button" style="align-self:flex-start;">Submit Response</button>
+          <p class="response-status" style="margin: 0; font-size: 0.9rem;"></p>
+        </form>
+      </div>
+    )}
   </article>
 ))}
 {entries.length === 0 && <p>{emptyMessage}</p>}
+
+{responseFormEndpoint && (
+  <style>
+    .response-box {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--bg-elevated);
+      padding: 1.1rem 1.4rem;
+      margin-top: 1.25rem;
+    }
+    .response-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      max-width: 480px;
+    }
+  </style>
+)}
+
+{responseFormEndpoint && (
+  <script>
+    document.querySelectorAll('.response-form').forEach((form) => {
+      const status = form.querySelector('.response-status');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const endpoint = (form as HTMLFormElement).dataset.endpoint;
+        if (!status) return;
+
+        if (!endpoint || endpoint.includes('YOUR_FORM_ID')) {
+          status.textContent = "This form isn't connected yet.";
+          (status as HTMLElement).style.color = 'var(--accent)';
+          return;
+        }
+
+        status.textContent = 'Sending…';
+        (status as HTMLElement).style.color = 'var(--text-muted)';
+
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: new FormData(form as HTMLFormElement),
+          });
+          if (response.ok) {
+            status.textContent = 'Thanks — your response was sent!';
+            (status as HTMLElement).style.color = 'var(--brass)';
+            (form as HTMLFormElement).reset();
+          } else {
+            status.textContent = 'Something went wrong — please try again.';
+            (status as HTMLElement).style.color = 'var(--accent)';
+          }
+        } catch {
+          status.textContent = 'Something went wrong — please try again.';
+          (status as HTMLElement).style.color = 'var(--accent)';
+        }
+      });
+    });
+  </script>
+)}
