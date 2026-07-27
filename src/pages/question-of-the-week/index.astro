@@ -15,13 +15,14 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
   <div class="prose" style="padding-top:2.5rem;">
     <h1>Question of the Week</h1>
     <p style="color:var(--text-muted)">
-      Sometimes I think of or come in contact with good questions (mostly on reels) so the best ones will go here.
+      I love questions! And sometimes I think of or come in contact with good ones (mostly on reels) so the best ones will go here. 
     </p>
     <FeedList
       entries={entries}
       pdfDir="question-of-the-week-files"
       emptyMessage="Nothing here yet — add a Markdown file to src/content/questionOfWeek/ to get started."
       responseFormEndpoint={FORMSPREE_ENDPOINT}
+      titleFontSize="1.3rem"
     />
   </div>
 </BaseLayout>
