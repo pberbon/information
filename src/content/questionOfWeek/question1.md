@@ -1,7 +1,6 @@
 ---
 date: 2026-08-02
-title: "Your question goes here?"
+title: "If you lost all of your memories and had to choose one person to explain to you who you are, who would it be and why?"
 ---
 
-Optional extra notes or context about the question can go here. Delete this
-line if you don't need it — the body is optional.
+Found this one on a reel
