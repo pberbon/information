@@ -3,7 +3,7 @@
 export const SITE = {
   name: 'Patrick Berbon',
   title: 'Patrick Berbon',
-  tagline: "Weekly notes, matcha tasting logs, a running song ranking, and whatever else I'm into.",
+  tagline: "A variety of thoughts cooked up by yours truly",
   email: 'patrick.z.berbon@gmail.com',
   github: 'https://github.com/your-username',
   linkedin: 'https://linkedin.com/in/your-username',
