@@ -4,6 +4,10 @@ import songs from '../../data/songs.json';
 
 const base = import.meta.env.BASE_URL;
 const sorted = [...songs].sort((a, b) => a.rank - b.rank);
+const genres = [...new Set(songs.map((s) => s.genre))].sort();
+
+// Same Formspree endpoint used on the Media Reviews page.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzeqydw';
 ---
 <BaseLayout title="Top 150 Songs" description="My top 300 songs, ranked.">
   <div class="prose" style="padding-top:2.5rem;">
@@ -27,5 +31,77 @@ const sorted = [...songs].sort((a, b) => a.rank - b.rank);
     </ol>
 
     {sorted.length === 0 && <p>No songs yet — add entries to <code>src/data/songs.json</code>.</p>}
+
+    <div class="recommend-box">
+      <h3 style="margin-top:0;">Recommend a song!</h3>
+
+      <form id="song-recommend-form" data-endpoint={FORMSPREE_ENDPOINT} style="display:flex; flex-direction:column; gap:0.75rem; max-width:480px;">
+        <input type="text" name="recommender" placeholder="Your name (optional)" autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
+        <input type="text" name="song" placeholder="Song title" required autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
+        <input type="text" name="artist" placeholder="Artist" required autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);" />
+        <select name="genre" required
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);">
+          <option value="" disabled selected>Genre</option>
+          {genres.map((g) => <option value={g}>{g}</option>)}
+          <option value="Other">Other / not sure</option>
+        </select>
+        <textarea name="reason" placeholder="Why you're recommending it" rows="3" autocomplete="off"
+          style="padding:0.6rem 0.9rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-serif);"></textarea>
+        <button type="submit" class="button" style="align-self:flex-start;">Submit Recommendation</button>
+        <p id="song-recommend-status" style="margin: 0; font-size: 0.9rem;"></p>
+      </form>
+    </div>
   </div>
+
+  <style>
+    .recommend-box {
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--bg-elevated);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0 2rem;
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('song-recommend-form') as HTMLFormElement | null;
+    const status = document.getElementById('song-recommend-status');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const endpoint = form.dataset.endpoint;
+      if (!status) return;
+
+      if (!endpoint || endpoint.includes('YOUR_FORM_ID')) {
+        status.textContent = 'This form isn\'t connected yet — set FORMSPREE_ENDPOINT in top-300-songs/index.astro.';
+        status.style.color = 'var(--accent)';
+        return;
+      }
+
+      status.textContent = 'Sending…';
+      status.style.color = 'var(--text-muted)';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        if (response.ok) {
+          status.textContent = 'Thank you for the rec!';
+          status.style.color = 'var(--brass)';
+          form.reset();
+        } else {
+          status.textContent = 'Something went wrong — please try again.';
+          status.style.color = 'var(--accent)';
+        }
+      } catch {
+        status.textContent = 'Something went wrong — please try again.';
+        status.style.color = 'var(--accent)';
+      }
+    });
+  </script>
 </BaseLayout>
