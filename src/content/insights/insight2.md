@@ -1,4 +1,5 @@
 ---
+title: "Learning"
 date: 2026-07-19
 pdfFile: "Learning.pdf"
 ---
