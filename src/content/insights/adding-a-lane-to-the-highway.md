@@ -1,6 +1,6 @@
 ---
 title: "Adding a Lane to the Highway"
-date: 2026-08-05
+date: 2026-08-06
 pdfFile: "Adding_a_Lane_to_the_Highway.pdf"
 ---
 
